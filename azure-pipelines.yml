@@ -4,10 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- main
+- '*'
+# - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-20.04'
   demands:
   - npm
 
@@ -22,14 +23,14 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .NET SDK 5.x'
   inputs:
-    packageType: sdk
+    packageType: 'sdk'
     version: '5.x'
 
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
     verbose: false
-  
+
 - script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
   displayName: 'Compile Sass assets'
 
@@ -53,9 +54,9 @@ steps:
     projects: '**/*.csproj'
     arguments: '--no-restore --configuration Release'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+# - task: NuGetCommand@2
+#   inputs:
+#     restoreSolution: '$(solution)'
 
 # - task: VSBuild@1
 #   inputs:
