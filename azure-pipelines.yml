@@ -1,11 +1,5 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - '*'
-# - main
 
 pool:
   vmImage: 'ubuntu-20.04'
@@ -13,17 +7,13 @@ pool:
   - npm
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-# - task: NuGetToolInstaller@1
-
 - task: UseDotNet@2
   displayName: 'Use .NET SDK 5.x'
   inputs:
-    packageType: 'sdk'
+    packageType: sdk
     version: '5.x'
 
 - task: Npm@1
@@ -46,26 +36,10 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-  
+
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - Release'
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
     arguments: '--no-restore --configuration Release'
-
-# - task: NuGetCommand@2
-#   inputs:
-#     restoreSolution: '$(solution)'
-
-# - task: VSBuild@1
-#   inputs:
-#     solution: '$(solution)'
-#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
-# - task: VSTest@2
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
+    projects: '**/*.csproj'
